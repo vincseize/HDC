@@ -1,0 +1,212 @@
+Installation des HC
+
+On installe un système de base de gentoo en suivant la doc:
+https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
+
+Configuration pour la compilation:
+Modification du fichier make.conf:
+
+/etc/portage/make.conf
+USE="bindist mmx see see2 alsa"
+MAKEOPTS="-j6"
+LINGUAS="fr en"
+
+Installer genkernel:
+
+emerge genkernel gentoolkit
+
+Lancement de la compilation:
+
+genkernel --menuconfg --oldconfig all
+
+Option de compilation:
+Pour la carte ethernet:
+
+Device driver
+Network device support
+Ethernet driver supports
+<*> Atheros L2 Fast Ethernet support
+<*> Intel(R) PRO/1000 Gigabit Ethernet support
+<*> Intel(R) PRO/1000 PCI-Express Gigabit Ethernet support
+<*> Intel(R) 82575/82576 PCI-Express Gigabit Ethernet support
+<*> JMicron(R) PCI-Express Gigabit Ethernet support
+
+Pour la carte son:
+
+Device driver
+Sound card support
+<*> Advanced Linux Sound Architecture
+<*> PCI sound devices
+HD-Audio
+<*> HD Audio PCI
+[*] Support jack plugging notification via input layer
+<*> Build Analog Device HD-audio codec support
+<*> Build HDMI/DisplayPort HD-audio codec support
+
+Pour la mémoire interne:
+
+Device driver
+<*> MMC/SD/SDIO card support
+<*> MMC block device driver
+<*> Secure Digital Host Controller Interface support
+<*> SDHCI support on PCI bus
+
+Pour la carte WIFI:
+
+Networking support
+<*>RF switch subsystem support
+Wireless
+<*> cfg80211 - wireless configuration API
+<*> Generic IEEE 802.11 Networking Stack (mac80211)
+Device driver
+Network device support
+Wireless LAN
+<M> Intel Wireless Wifi Next Gen AGN - Wireless-N/Advanced-
+N/Ultimate-N (iwlwifi)
+<M> Intel Wireless Wifi MVM Firmware support
+Créer un fichier compil-kernel_ok à la racine du système.
+
+Configuration du système
+Fichiers de conf:
+
+/etc/fstab
+/dev/sda1 / ext4 noatime,discard 0 1
+/etc/conf.d/net
+config_enp4s0=("dhcp")
+config_wlp1s0=("dhcp")
+modules="wpa_supplicant"
+/etc/conf.d/keymaps
+keymap="fr"
+windowkeys="YES"
+fix_euro="YES"
+
+Autres:
+mot de passe root: headcam
+
+Créer un fichier config-etc_ok à la racine du système.
+Installation des packages avec emerge
+Les packages système:
+
+		o sys-process/vixie-cron
+		o app-admin/syslog-ng
+		o net-misc/dhcpcd
+		o app-editors/vim
+		o sys-apps/pciutils
+		o net-wireless/wpa_supplicant
+		o media-libs/alsa-lib
+		o media-sound/alsa-utils
+		o dev-libs/libusb
+		o sys-kernel/linux-firmware
+		o sys-apps/lshw
+		o app-portage/gentoolkit
+		o app-portage/euses
+		o sys-apps/mlocate
+		o virtual/libusb
+		o sys-apps/dmidecode
+		o net-wireless/wireless-tools
+		o sys-apps/usbutils
+		o sys-boot/grub
+		o sys-fs/fuse-exfat
+
+Commande pour l'install en oneshot:
+
+emerge --ask sys-process/vixie-cron app-admin/syslog-ng net-misc/dhcpcd appeditors/
+vim sys-apps/pciutils net-wireless/wpa_supplicant media-libs/alsa-lib
+media-sound/alsa-utils dev-libs/libusb sys-kernel/linux-firmware sys-apps/lshw
+app-portage/gentoolkit app-portage/euses sys-apps/mlocate virtual/libusb sysapps/
+dmidecode net-wireless/wireless-tools sys-apps/usbutils sys-boot/grub sysfs/
+fuse-exfat
+
+Créer un fichier install-package-system_ok à la racine du système.
+Les packages pour le grabber de Dynamixyz:
+
+		o app-admin/sudo
+		o sys-apps/iproute2
+		o dev-python/setuptools
+		o dev-python/numpy
+		o dev-python/m2crypto
+		o dev-ccp/tbb
+		o media-libs/opencv
+		o dev-qt/qtcore-4.8.5-r2
+		o dev-qt/qtgui-4.8.5-r4
+		o media-video/ffmpeg
+		o media-libs/libjpeg-turbo
+
+Commande pour l'install en oneshot:
+
+emerge --ask app-admin/sudo sys-apps/iproute2 dev-python/setuptools devpython/
+numpy dev-python/m2crypto dev-ccp/tbb media-libs/opencv devqt/
+qtcore-4.8.5-r2 dev-qt/qtgui-4.8.5-r4 media-video/ffmpeg media-libs/libjpegturbo
+
+Créer un fichier install-package-dynamixyz_ok à la racine du système.
+
+Installer les drivers XIMEA
+La procédure vient de la page de XIMEA:
+
+http://www.ximea.com/support/wiki/apis/XIMEA_Linux_Software_Package
+
+1. Télécharger les fichiers:
+
+wget http://www.ximea.com/downloads/recent/XIMEA_Linux_SP.tgz
+
+2. Décompresser:
+
+tar xzf XIMEA_Linux_SP.tgz cd package
+
+3. Installer le driver:
+
+cd package
+./install -cam_usb30
+
+Voir dans le répertoire /opt la présence des fichiers XIMEA.
+Créer un fichier install-driver-XIMEA_ok à la racine du système.
+Configuration du Wifi
+Configuration du Wifi:
+
+/etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+network={
+ssid="Thirdeye"
+psk="headcam"
+}
+
+Lancement de la carte au boot:
+
+ln -s /etc/init.d/net{.lo,.wlp1s0}
+rc-update add net.wlp1s0 default
+
+Configuration de la carte son
+Lancement du manager son (alsa) au boot:
+
+rc-update add alsasound boot
+Lancer la commande alsamixer et activer le micro:
+1. choisir l'entrée RearMic
+2. umute capture
+3. pousser le volume à 80%
+
+Installation du grabber
+Récupérer les sources de Dynamixyz qui contient les répertoires suivants:
+
+		o converter
+		o
+		o grabber
+		o grabber3rdparty
+		o grabberCodebase
+		o monitor
+
+Pour le grabber des headcam, il faut copier les répertoires dans /opt/dynamixyz:
+
+		o grabber
+		o grabberCodebase
+		o grabber3rdparty
+
+Une fois les fichiers copié dans /opt/dynamixyz, il faut compiler les sources:
+
+cd /opt/dynamixyz/grabber
+mkdir BuildL
+cp default.cfg BuildL
+cd BuildL
+cmake /opt/dynamixyz/grabber/
+make

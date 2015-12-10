@@ -15,4 +15,5 @@ while true
 	echo "## Details even not connected ####"
 	nmcli con list id "NEUF_D918" | awk '/key-mgmt/ {print $2}' # ---> TYPE WPA
         sleep 5
+        
 done  

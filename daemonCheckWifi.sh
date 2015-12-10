@@ -14,6 +14,38 @@ while true
 	#iwlist NEUF_D918 scan # verboten sometimes
 	echo "## Details even not connected ####"
 	nmcli con list id "NEUF_D918" | awk '/key-mgmt/ {print $2}' # ---> TYPE WPA
+
+
+
+: '
+Disconnect:
+
+nmcli d disconnect iface wlan0
+
+Connect:
+
+nmcli d wifi connect <WiFiSSID> password <WiFiPassword> iface wlan0
+Just change wlan0, <WiFiSSID>, <WiFiPassword> to reflect your setup.
+
+If WiFi info already saved, easier way:
+
+Disconnect:
+
+nmcli c down id <WiFiConn>
+
+Connect:
+
+nmcli c up id <WiFiConn>
+'
+
+
+
+
+
+
+
         sleep 5
+        
+        
         
 done  

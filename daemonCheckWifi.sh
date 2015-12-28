@@ -40,10 +40,6 @@ nmcli c up id <WiFiConn>
 
 
 
-
-
-
-
         sleep 5
         
         

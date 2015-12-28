@@ -5,3 +5,5 @@ while true
         echo $(date) >> /tmp/output
         sleep 5
 done  
+
+

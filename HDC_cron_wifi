@@ -3,3 +3,4 @@
 # a copier dans /usr/local/bin/
 
 */2 * * * * root /usr/local/bin/wificheck.sh
+

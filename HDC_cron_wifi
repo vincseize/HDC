@@ -2,5 +2,5 @@
 #
 # a copier dans /usr/local/bin/
 
-*/2 * * * * root /usr/local/bin/wificheck.sh
+*/2 * * * * root /usr/local/bin/HDC_wifi_check.sh
 

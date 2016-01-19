@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Démarre une instance du logiciel "Grabber", et le relance si
+# jamais il plante.
+# En revanche si il quite de façon normale (exit code 0), il ne
+# se relance pas.
+# Le 'sleep 1' permet de tempérer la boucle dans le cas où le
+# logiciel plante à tout les coups.
+# 
+# À copier dans /usr/local/bin/
+#
+until grabber
+do
+    echo "Le logiciel 'grabber' s'est interrompu avec le code de sortie $?.  Relancement..." >&2
+    sleep 1
+done
+
+# Ce script peut-être ajouté aux tâches CRON avec la ligne
+# suivante (lancer "crontab -e" pour l'ajouter) :
+#
+# @reboot /usr/local/bin/HDC_grabber_mon.sh
+#
+# Ceci permettra de relancer ce deamon au prochain redémarrage 
+# du système.

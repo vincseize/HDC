@@ -13,7 +13,7 @@ while true
 	#echo "######## scan wifi name if authorized     #############"
 	#iwlist NEUF_D918 scan # verboten sometimes
 	echo "## Details even not connected ####"
-	nmcli con list id "NEUF_D918" | awk '/key-mgmt/ {print $2}' # ---> TYPE WPA
+	nmcli con list id "NEUF_D918" | awk '/key-mgmt/ {print $2}' # ---> TYPE WPA:WEP -> todo write at installation
 
 
 

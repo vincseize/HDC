@@ -1,0 +1,16 @@
+Monitor HC dows
+
+https://app.box.com/s/a0y5qwbb7yg8b29bni2hxk9whgocq2lp
+pour le runtime de vc++ sabsent
+https://www.microsoft.com/fr-fr/download/details.aspx?id=14632
+
+ssh IP boitier
+
+log : root
+pass : headcam
+
+cd /opt/dynamixyz/grabber/BuildL
+
+puis lancer la commande :
+
+./Grabber

@@ -9,7 +9,7 @@ ssh IP boitier
 log : root
 pass : headcam
 
-(si ls a la racine , cd ./ )
+(si ls a la racine , cd / )
 
 cd /opt/dynamixyz/grabber/BuildL/
 

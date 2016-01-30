@@ -1,0 +1,10 @@
+ssh IP
+
+log : root
+pass : headcam
+
+cd /opt/dynamixyz/grabber/BuildL
+
+puis lancer la commande :
+
+./Grabber

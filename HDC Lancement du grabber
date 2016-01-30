@@ -1,4 +1,4 @@
-ssh IP
+ssh IP boitier
 
 log : root
 pass : headcam

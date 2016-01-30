@@ -9,7 +9,9 @@ ssh IP boitier
 log : root
 pass : headcam
 
-cd /opt/dynamixyz/grabber/BuildL
+(si ls a la racine , cd ./ )
+
+cd /opt/dynamixyz/grabber/BuildL/
 
 puis lancer la commande :
 

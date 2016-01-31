@@ -3,6 +3,7 @@
 
 # mettre ce fichier dans etc/local.d
 # les fichiers .start sont execute par ordre alphabetique
+# pas oublier chmod +x ou 777
 
 until /opt/dynamixyz/grabber/BuildL/Grabber
 do

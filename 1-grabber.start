@@ -2,6 +2,7 @@
 # virer etc/init.d/grabber orinal ou deplacer 
 
 # mettre ce fichier dans etc/local.d
+# les fichiers .start sont execute par ordre alphabetique
 
 until /opt/dynamixyz/grabber/BuildL/Grabber
 do

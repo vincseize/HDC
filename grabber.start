@@ -1,12 +1,56 @@
 #!/bin/bash
-# virer etc/init.d/grabber orinal ou deplacer 
+#
+# Demarre une instance du logiciel "Grabber" quand la passerelle reseau est accessible,
+# et le relance si jamais il plante.
+# En revanche si il quitte de façon normale (exit code 0), il ne se relance pas.
+#
+# LRDS 2016 - Karlova & Polosson
+#
 
-# mettre ce fichier dans etc/local.d et ecrire Sous Linux IMPORTANT , via nano !!!
-# les fichiers .start sont execute par ordre alphabetique
-# pas oublier chmod +x ou 777
+logfile="/root/ping_grabber.log"	## Chemin vers le fichier de log a ecrire
+# logfile="/dev/null"				## Decommenter pour désactiver le fichier de log
+
+echo -e "LRDS GRABBER STARTUP LAUNCHER - $(date)\n" >$logfile
+
+ROUTER_IP=""
+while [[ ! $ROUTER_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+do
+	ROUTER_IP=`route -n | grep "UG" | grep -v "UGH" | cut -f 10 -d " "`
+	sleep 1
+done
+
+echo -e "Gateway IP: $ROUTER_IP\n" >>$logfile
+
+while ! ping -w1 -c1 $ROUTER_IP >>$logfile 2>&1
+do
+   echo -e "\nNetwork gateway UNREACHABLE!! Retrying..." >>$logfile
+   sleep 1
+done
+
+echo -e "\nOK! Network gateway now reachable. Launching Grabber..." >>$logfile
+
+if [ ! -e "/opt/dynamixyz/grabber/BuildL/Grabber" ]; then
+	echo -e "\n!!!!!!! Grabber binary NOT FOUND ('/opt/dynamixyz/grabber/BuildL/Grabber' doesn't exists) !!!!!!!" >>$logfile
+	exit 0
+fi
+
+countCrash=0
 
 until /opt/dynamixyz/grabber/BuildL/Grabber
 do
-echo -e "################ \n Grabber Crashed with code $? respawn...\n################" >&2
-sleep 2
+	exitcode=$?
+	((countCrash = $countCrash + 1))
+    echo -e "\n################\n'Grabber' was interrupted with exit code $exitcode. Respawning...\n################" >&2
+    echo -e "\n################\n'Grabber' was interrupted with exit code $exitcode, on $(date). (crash #$countCrash)." >>$logfile
+    sleep 2
 done
+
+
+# Ce script peut etre ajoute aux scripts de demarrage, en le copiant
+# dans le dossier "/etc/local.d/" et en le nommant "grabber.start". Ex:
+#
+#    cp HDC_grabber_start.sh /etc/local.d/grabber.start
+#    chmod +x /etc/local.d/grabber.start
+#
+# Ceci permettra de relancer ce deamon au prochain demarrage du système.
+#

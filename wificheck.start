@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Effectue un PING sur la passerelle reseau. Si elle est inaccessible,
+# on essaye de reconnecter en WIFI.
+# Si le ping a reussi, on reessaye une minute plus tard.
+# 
+# LRDS 2016 - Karlova & Polosson
+#
+
+logfile="/root/ping_wifi.log"		## Chemin vers le fichier de log a ecrire
+# logfile="/dev/null"				## Decommenter pour désactiver le fichier de log
+
+echo -e "LRDS WIFI CONNECTION STARTUP CHECK - $(date)\n" >$logfile
+
+ROUTER_IP=""
+while [[ ! $ROUTER_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+do
+	ROUTER_IP=`route -n | grep "UG" | grep -v "UGH" | cut -f 10 -d " "`
+	sleep 1
+done
+
+echo -e "Gateway IP: $ROUTER_IP\n" >>$logfile
+
+countTry=0
+
+while true
+do
+	ping -w1 -c1 $ROUTER_IP >>$logfile 2>&1
+	rc=$?
+	if [ $rc -eq 0 ]; then
+		echo -e "\nOK! Network gateway reachable. Next check in 1 minute...\n" >>$logfile
+		countTry=0
+		sleep 60
+	else
+		((countTry = $countTry + 1))
+		echo -e "\nNetwork gateway UNREACHABLE!! Trying to connect wifi (try #$countTry)...\n" >>$logfile
+		echo -e "\nNetwork gateway UNREACHABLE!! Trying to connect wifi (try #$countTry)...\n" 2>&1
+		
+		echo -e "TODO !! iwconfig tout ça...\n"
+		
+		
+		sleep 2
+	fi
+	echo -e "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #\n" >>$logfile
+done
+
+# Ce script peut etre ajoute aux scripts de demarrage, en le copiant
+# dans le dossier "/etc/local.d/" et en le nommant "wificheck.start". Ex:
+#
+#    cp HDC_wificheck.sh /etc/local.d/wificheck.start
+#    chmod +x /etc/local.d/wificheck.start
+#
+# Ceci permettra de relancer ce deamon au prochain demarrage du système.
+#

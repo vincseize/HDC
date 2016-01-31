@@ -1,7 +1,7 @@
 #!/bin/bash
 # virer etc/init.d/grabber orinal ou deplacer 
 
-# dans etc/local.d
+# mettre ce fichier dans etc/local.d
 
 until /opt/dynamixyz/grabber/BuildL/Grabber
 do

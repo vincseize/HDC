@@ -1,0 +1,10 @@
+#!/bin/bash
+# virer etc/init.d/grabber orinal ou deplacer 
+
+# dans etc/local.d
+
+until /opt/dynamixyz/grabber/BuildL/Grabber
+do
+echo -e "################ \n Grabber Crashed with code $? respawn...\n################" >&2
+sleep 2
+done

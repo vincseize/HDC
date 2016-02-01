@@ -7,8 +7,12 @@
 # LRDS 2016 - Karlova & Polosson
 #
 
-logfile="/root/ping_grabber.log"	## Chemin vers le fichier de log a ecrire
-# logfile="/dev/null"				## Decommenter pour désactiver le fichier de log
+if [ ! -e "/root/disableLogs" ]; then
+	logfile="/root/grabber_start.log"
+else
+	logfile="/dev/null"
+fi
+# logfile="/dev/null"	## Decommenter pour forcer la desactivation du fichier de log
 
 echo -e "LRDS GRABBER STARTUP LAUNCHER - $(date)\n" >$logfile
 
@@ -44,13 +48,3 @@ do
     echo -e "\n################\n'Grabber' was interrupted with exit code $exitcode, on $(date). (crash #$countCrash)." >>$logfile
     sleep 2
 done
-
-
-# Ce script peut etre ajoute aux scripts de demarrage, en le copiant
-# dans le dossier "/etc/local.d/" et en le nommant "grabber.start". Ex:
-#
-#    cp HDC_grabber_start.sh /etc/local.d/grabber.start
-#    chmod +x /etc/local.d/grabber.start
-#
-# Ceci permettra de relancer ce deamon au prochain demarrage du système.
-#

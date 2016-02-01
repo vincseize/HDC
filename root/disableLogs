@@ -1,0 +1,5 @@
+Ce petit fichier sert a desactiver les logs pour les 2 scripts, "grabber_start.sh" et "wificheck.sh".
+Sa simple presence dans le dossier /root/ suffit a desactiver les logs.
+
+Pour activer les logs, il suffit de le renommer autrement, par exemple "enableLogs".
+C'est tout !

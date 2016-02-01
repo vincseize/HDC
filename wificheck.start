@@ -7,8 +7,12 @@
 # LRDS 2016 - Karlova & Polosson
 #
 
-logfile="/root/ping_wifi.log"		## Chemin vers le fichier de log a ecrire
-# logfile="/dev/null"				## Decommenter pour désactiver le fichier de log
+if [ ! -e "/root/disableLogs" ]; then
+        logfile="/root/wificheck.log"
+else
+        logfile="/dev/null"
+fi
+# logfile="/dev/null"                   ## Decommenter pour forcer la desactivation du fichier de log
 
 echo -e "LRDS WIFI CONNECTION STARTUP CHECK - $(date)\n" >$logfile
 
@@ -42,13 +46,10 @@ do
 		sleep 2
 	fi
 	echo -e "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #\n" >>$logfile
+	# de/reactivation des logs si le fichier de desactivation a change de nom ;)
+	if [ ! -e "/root/disableLogs" ]; then
+        	logfile="/root/wificheck.log"
+	else
+        	logfile="/dev/null"
+	fi
 done
-
-# Ce script peut etre ajoute aux scripts de demarrage, en le copiant
-# dans le dossier "/etc/local.d/" et en le nommant "wificheck.start". Ex:
-#
-#    cp HDC_wificheck.sh /etc/local.d/wificheck.start
-#    chmod +x /etc/local.d/wificheck.start
-#
-# Ceci permettra de relancer ce deamon au prochain demarrage du système.
-#

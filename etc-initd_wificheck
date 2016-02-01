@@ -1,0 +1,21 @@
+#!/sbin/runscript
+
+description="Periodically check if local network is connected. Else, tries to connect with wifi."
+
+depend() {
+	after bootmisc
+	need net
+}
+
+start() {
+	ebegin "Starting Wificheck deamon"
+	/root/wificheck.sh &
+	echo $! > /root/wificheck.pid
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Wificheck daemon"
+	kill -9 $(cat /root/wificheck.pid)
+	eend $?
+}
